@@ -1,10 +1,18 @@
 package main
 
-type Erro struct {
+// Erro representa um erro da aplicação.
+type Erro struct { //nolint:errname
 	Mensagem string
 	Inicial  error
 }
 
+// Error torna a struct Erro compatível com a interface error.
 func (erro *Erro) Error() string {
-	return erro.Mensagem
+	mensagem := erro.Mensagem
+
+	if erro.Inicial != nil {
+		mensagem += "\n" + erro.Inicial.Error()
+	}
+
+	return mensagem
 }
