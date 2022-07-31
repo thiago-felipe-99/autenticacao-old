@@ -8,13 +8,16 @@ linters-settings:
   funlen:
     lines: 150
     statements: 50
+  varnamelen:
+    ignore-names:
+      - id
 linters:
   enable:
     - asasalint
     - bidichk
-    - bodyclose
+    # - bodyclose
     - containedctx
-    - contextcheck
+    # - contextcheck
     - cyclop
     - deadcode
     - decorder
@@ -62,10 +65,10 @@ linters:
     - makezero
     - nakedret
     - nestif
-    - nilerr
+    # - nilerr
     - nilnil
     - nlreturn
-    - noctx
+    # - noctx
     - nolintlint
     - nonamedreturns
     - nosnakecase
@@ -75,21 +78,21 @@ linters:
     - predeclared
     - promlinter
     - revive
-    - rowserrcheck
-    - sqlclosecheck
-    - structcheck
+    # - rowserrcheck
+    # - sqlclosecheck
+    # - structcheck
     - stylecheck
     - tagliatelle
     - tenv
     - testpackage
     - thelper
-    - tparallel
+    # - tparallel
     - typecheck
     - unconvert
     - unparam
     - varcheck
     - varnamelen
-    - wastedassign
+    # - wastedassign
     - whitespace
     - wrapcheck
     - wsl
