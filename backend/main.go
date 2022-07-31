@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/thiago-felipe-99/autenticacao/backend/data"
 	"github.com/thiago-felipe-99/autenticacao/backend/http"
@@ -30,19 +29,9 @@ func main() {
 	lógica := &logica.Usuário{
 		BD: data,
 	}
-	rotasUsuário := http.Usuário{
-		Lógica: lógica,
-	}
 
-	servidorHTTP := gin.Default()
-
-	servidorHTTP.POST("/usuário", rotasUsuário.Criar)
-	servidorHTTP.GET("/usuário/:id", rotasUsuário.PegarPorID)
-	servidorHTTP.PUT("/usuário/:id", rotasUsuário.Atulizar)
-	servidorHTTP.DELETE("/usuário/:id", rotasUsuário.Deletar)
-
-	err = servidorHTTP.Run()
-	if err != nil {
-		log.Panicf("Erro ao iniciar o servidor HTTP: %v", err)
+	erro := http.IniciarServidor(lógica)
+	if erro != nil {
+		log.Panicln(erro.Error())
 	}
 }
