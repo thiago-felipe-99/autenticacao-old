@@ -10,7 +10,7 @@ import (
 // Usuário representa as possíveis lógicas que a entidade Usuário
 // pode ter.
 type Usuário struct {
-	BD data.SQL
+	BD *data.SQL
 }
 
 // Criar cria um usuário na aplicação.

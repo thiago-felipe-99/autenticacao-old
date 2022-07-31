@@ -13,17 +13,12 @@ import (
 
 // SQL represnta uma conexão com um banco de dados do tipo SQL.
 type SQL struct {
-	Hostname     string
-	Porta        string
-	Usuário      string
-	Senha        string
-	BancoDeDados string
-	conexão      sql.DB
+	Conexão *sql.DB
 }
 
 // CriarUsuário adionca um usuário no banco de dados.
 func (bd *SQL) CriarUsuário(ctx context.Context, usuário entidades.Usuário) *erro.Erro {
-	_, err := bd.conexão.ExecContext(
+	_, err := bd.Conexão.ExecContext(
 		ctx,
 		"INSER INTO usuário (id, nome, apelido, email, senha) VALUES ($1, $2, $3, $4, $5)",
 		usuário.ID,
@@ -48,7 +43,7 @@ func (bd *SQL) AtualizarUsuário(
 	id uuid.UUID,
 	usuário *entidades.Usuário,
 ) *erro.Erro {
-	_, err := bd.conexão.ExecContext(
+	_, err := bd.Conexão.ExecContext(
 		ctx,
 		"UPDATE usuário SET nome = $1, apelido = $2, email = $3, senha = $4 WHERE id = $5",
 		usuário.Nome,
@@ -74,7 +69,7 @@ func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (
 ) {
 	var usuário *entidades.Usuário
 
-	query := bd.conexão.QueryRowContext(
+	query := bd.Conexão.QueryRowContext(
 		ctx,
 		"SELECT (nome, apelido, email, senha) WHERE id = $1",
 		id,
@@ -95,7 +90,7 @@ func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (
 
 // DeletarUsuário remove um usuário do banco de dados.
 func (bd *SQL) DeletarUsuário(ctx context.Context, id uuid.UUID) *erro.Erro {
-	_, err := bd.conexão.ExecContext(ctx, "DELETE FROM usuário WHERE id = $1", id)
+	_, err := bd.Conexão.ExecContext(ctx, "DELETE FROM usuário WHERE id = $1", id)
 	if err != nil {
 		return &erro.Erro{
 			Mensagem: "Erro ao deletar usuário do banco de dados",

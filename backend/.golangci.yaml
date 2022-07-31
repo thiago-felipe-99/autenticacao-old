@@ -11,6 +11,7 @@ linters-settings:
   varnamelen:
     ignore-names:
       - id
+      - bd
 linters:
   enable:
     - asasalint
