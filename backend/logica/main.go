@@ -1,18 +1,20 @@
-package main
+// Package logica representa quais são as lógicas da aplicação.
+package logica
 
-import "github.com/google/uuid"
+import (
+	"github.com/thiago-felipe-99/autenticacao/backend/data"
+	"github.com/thiago-felipe-99/autenticacao/backend/entidades"
+	"github.com/thiago-felipe-99/autenticacao/backend/erro"
+)
 
-// Usuário representa um usuário da aplicação
+// Usuário representa as possíveis lógicas que a entidade Usuário
+// pode ter.
 type Usuário struct {
-	ID      uuid.UUID
-	Nome    string
-	Apelido string
-	Email   string
-	Senha   string
+	BD data.SQL
 }
 
 // Criar cria um usuário na aplicação.
-func Criar(nome, senha, apelido string) (*Usuário, *Erro) {
+func (lógica *Usuário) Criar(nome, senha, apelido string) (*entidades.Usuário, *erro.Erro) {
 	// verificar se existe existe(apelido, email)
 	// verificar se senha é válida
 	// criar usário em data
@@ -20,20 +22,20 @@ func Criar(nome, senha, apelido string) (*Usuário, *Erro) {
 }
 
 // BuscarPorNome todos os usuários com nome parecidos.
-func BuscarPorNome(nome string) (*[]Usuário, *Erro) {
+func (lógica *Usuário) BuscarPorNome(nome string) (*[]entidades.Usuário, *erro.Erro) {
 	// Pesquisar por nome em data.
 	return nil, nil
 }
 
 // BuscarPorID retorna um usuário pelo seu ID.
-func BuscarPorID(id string) (*Usuário, *Erro) {
+func (lógica *Usuário) BuscarPorID(id string) (*entidades.Usuário, *erro.Erro) {
 	// verifcar se ID é um UUID válido
 	// Pesquisar o ID em data
 	return nil, nil
 }
 
 // AlterarSenha altera a senha do usuário da aplicação.
-func AlterarSenha(id, senhaVelha, senhaNova string) *Erro {
+func (lógica *Usuário) AlterarSenha(id, senhaVelha, senhaNova string) *erro.Erro {
 	// verificar se ID é válido
 	// Pegar usuário em data pelo ID
 	// verificar se a senha do usuário é igual a senhaNova
@@ -43,7 +45,7 @@ func AlterarSenha(id, senhaVelha, senhaNova string) *Erro {
 }
 
 // Deletar remove um usuário da aplicação.
-func Deletar(id, senha string) *Erro {
+func (lógica *Usuário) Deletar(id, senha string) *erro.Erro {
 	// verificar se ID é válido
 	// Pegar usuário em data pelo ID
 	// verificar se as senhas são iguais

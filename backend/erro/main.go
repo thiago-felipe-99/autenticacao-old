@@ -1,4 +1,5 @@
-package main
+// Package erro descreve como deve ser tratado os erros da aplicação
+package erro
 
 // Erro representa um erro da aplicação.
 type Erro struct { //nolint:errname

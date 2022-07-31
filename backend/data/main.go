@@ -1,10 +1,14 @@
-package main
+// Package data representa quais são as interações da aplicação com os
+// sistemas de amarzenamento.
+package data
 
 import (
 	"context"
 	"database/sql"
 
 	"github.com/google/uuid"
+	"github.com/thiago-felipe-99/autenticacao/backend/entidades"
+	"github.com/thiago-felipe-99/autenticacao/backend/erro"
 )
 
 // SQL represnta uma conexão com um banco de dados do tipo SQL.
@@ -18,7 +22,7 @@ type SQL struct {
 }
 
 // CriarUsuário adionca um usuário no banco de dados.
-func (bd *SQL) CriarUsuário(ctx context.Context, usuário Usuário) *Erro {
+func (bd *SQL) CriarUsuário(ctx context.Context, usuário entidades.Usuário) *erro.Erro {
 	_, err := bd.conexão.ExecContext(
 		ctx,
 		"INSER INTO usuário (id, nome, apelido, email, senha) VALUES ($1, $2, $3, $4, $5)",
@@ -29,7 +33,7 @@ func (bd *SQL) CriarUsuário(ctx context.Context, usuário Usuário) *Erro {
 		usuário.Senha,
 	)
 	if err != nil {
-		return &Erro{
+		return &erro.Erro{
 			Mensagem: "Erro ao adicionar usuário no Banco De Dados",
 			Inicial:  err,
 		}
@@ -42,8 +46,8 @@ func (bd *SQL) CriarUsuário(ctx context.Context, usuário Usuário) *Erro {
 func (bd *SQL) AtualizarUsuário(
 	ctx context.Context,
 	id uuid.UUID,
-	usuário *Usuário,
-) *Erro {
+	usuário *entidades.Usuário,
+) *erro.Erro {
 	_, err := bd.conexão.ExecContext(
 		ctx,
 		"UPDATE usuário SET nome = $1, apelido = $2, email = $3, senha = $4 WHERE id = $5",
@@ -54,7 +58,7 @@ func (bd *SQL) AtualizarUsuário(
 		id,
 	)
 	if err != nil {
-		return &Erro{
+		return &erro.Erro{
 			Mensagem: "Erro ao atualizar usuário no Banco De Dados",
 			Inicial:  err,
 		}
@@ -64,8 +68,11 @@ func (bd *SQL) AtualizarUsuário(
 }
 
 // PegarUsuárioPorID retorna um usuário pelo seu ID.
-func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (*Usuário, *Erro) {
-	var usuário *Usuário
+func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (
+	*entidades.Usuário,
+	*erro.Erro,
+) {
+	var usuário *entidades.Usuário
 
 	query := bd.conexão.QueryRowContext(
 		ctx,
@@ -75,7 +82,7 @@ func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (*Usuário,
 
 	err := query.Scan(usuário.Nome, usuário.Apelido, usuário.Email, usuário.Senha)
 	if err != nil {
-		return nil, &Erro{
+		return nil, &erro.Erro{
 			Mensagem: "Erro ao pegar o usuário por ID",
 			Inicial:  err,
 		}
@@ -87,10 +94,10 @@ func (bd *SQL) PegarUsuárioPorID(ctx context.Context, id uuid.UUID) (*Usuário,
 }
 
 // DeletarUsuário remove um usuário do banco de dados.
-func (bd *SQL) DeletarUsuário(ctx context.Context, id uuid.UUID) *Erro {
+func (bd *SQL) DeletarUsuário(ctx context.Context, id uuid.UUID) *erro.Erro {
 	_, err := bd.conexão.ExecContext(ctx, "DELETE FROM usuário WHERE id = $1", id)
 	if err != nil {
-		return &Erro{
+		return &erro.Erro{
 			Mensagem: "Erro ao deletar usuário do banco de dados",
 			Inicial:  err,
 		}
